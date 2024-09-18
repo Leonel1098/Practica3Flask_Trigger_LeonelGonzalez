@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Listado de Ventas</h2>
+
+<!-- Formulario de filtro -->
+<form method="get" action="{{ url_for('listar_Ventas') }}" class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="Cliente" class="form-control" value="{{ filtro_nombre if filtro_nombre is not none else '' }}" placeholder="Cliente" value="{{ request.args.get('Cliente') }}">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="Producto" class="form-control" value="{{ filtro_nombre if filtro_nombre is not none else '' }}" placeholder="Producto" value="{{ request.args.get('Producto') }}">
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+    </div>
+</form>
+
+<a href="{{ url_for('crear_Venta') }}" class="btn btn-primary mb-3">Agregar Venta</a>
+<a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Regresar al Inicio</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if ventas %}
+            {% for venta in ventas %}
+            <tr>
+                <td>{{ venta.Venta_ID }}</td>
+                <td>{{ venta.Cliente }}</td>
+                <td>{{ venta.Producto }}</td>
+                <td>{{ venta.Cantidad }}</td>
+                <td>{{ venta.Fecha }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('eliminar_Venta', Venta_ID=venta.Venta_ID) }}" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este cliente?');">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                    <a href="{{url_for('actualizar_Ventas', Venta_ID=venta.Venta_ID)}}" class="btn btn-secondary btn-sm">Actualizar</a>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7">No se encontraron Ventas.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}

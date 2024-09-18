@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Listado de Movimientos en Ventas</h2>
+
+<!-- Formulario de filtro -->
+<form method="get" action="{{ url_for('listar_Auditoria') }}" class="mb-3">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" name="Cliente" class="form-control" value="{{ filtro_nombre if filtro_nombre is not none else '' }}" placeholder="Cliente" value="{{ request.args.get('Cliente') }}">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="Producto" class="form-control" value="{{ filtro_nombre if filtro_nombre is not none else '' }}" placeholder="Producto" value="{{ request.args.get('Producto') }}">
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+    </div>
+</form>
+
+<a href="{{ url_for('crear_Venta') }}" class="btn btn-primary mb-3">Agregar Venta</a>
+<a href="{{ url_for('index') }}" class="btn btn-secondary mb-3">Regresar al Inicio</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Auditoria ID</th>
+            <th>Venta ID</th>
+            <th>Accion</th>
+            <th>Fecha Accion</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if auditorias %}
+            {% for auditoria in auditorias %}
+            <tr>
+                <td>{{ auditoria.Auditoria_ID }}</td>
+                <td>{{ auditoria.Venta_ID }}</td>
+                <td>{{ auditoria.Accion }}</td>
+                <td>{{ auditoria.Fecha_Accion }}</td>
+                <td>{{ auditoria.Cliente }}</td>
+                <td>{{ auditoria.Producto }}</td>
+                <td>{{ auditoria.Cantidad }}</td>
+
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7">No se encontraron Movimientos.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+{% endblock %}
